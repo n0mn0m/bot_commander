@@ -6,7 +6,7 @@ import board
 import adafruit_ssd1306
 import adafruit_rfm9x
 
-logging.basicConfig(filename="/home/pi/sms.log", level=logging.INFO)
+logging.basicConfig(filename="/home/pi/logs/button.log", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 i2c = busio.I2C(board.SCL, board.SDA)

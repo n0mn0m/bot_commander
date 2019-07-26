@@ -14,7 +14,7 @@ from flask import Flask, request
 from twilio.rest import Client
 from twilio.twiml.messaging_response import MessagingResponse
 
-logging.basicConfig(filename="/home/pi/sms.log", level=logging.INFO)
+logging.basicConfig(filename="/home/pi/logs/sms.log", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Initialize and setup
