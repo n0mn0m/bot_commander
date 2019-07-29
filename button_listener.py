@@ -6,12 +6,17 @@ import board
 import adafruit_ssd1306
 import adafruit_rfm9x
 
-LOG_FORMAT = '%(asctime)s:%(levelname)s:%(message)s'
-logging.basicConfig(filename="/home/pi/logs/button.log", level=logging.INFO, format=LOG_FORMAT, datefmt='%m/%d/%Y %I:%M:%S %p')
+LOG_FORMAT = "%(asctime)s:%(levelname)s:%(message)s"
+logging.basicConfig(
+    filename="/home/pi/logs/button.log",
+    level=logging.INFO,
+    format=LOG_FORMAT,
+    datefmt="%m/%d/%Y %I:%M:%S %p",
+)
 logger = logging.getLogger(__name__)
 
 i2c = busio.I2C(board.SCL, board.SDA)
-display = adafruit_ssd1306.SSD1306_I2C(128, 32, i2c, addr=0x3c)
+display = adafruit_ssd1306.SSD1306_I2C(128, 32, i2c, addr=0x3C)
 
 # Configure LoRa Radio
 CS = DigitalInOut(board.CE1)
@@ -35,7 +40,7 @@ dock_button.pull = Pull.UP
 logger.info("Starting application")
 
 display.fill(0)
-display.text('RasPi LoRa', 35, 0, 1)
+display.text("RasPi LoRa", 35, 0, 1)
 display.show()
 
 while True:
@@ -43,19 +48,19 @@ while True:
         if not start_button.value:
             msg = "Starting Roomba."
             logger.info(msg)
-            rfm9x.send(bytes("1","ascii"))
+            rfm9x.send(bytes("1", "ascii"))
             display.fill(0)
             display.text(msg, 25, 15, 1)
         elif not stop_button.value:
             msg = "Stopping Roomba."
             logger.info(msg)
-            rfm9x.send(bytes("0","ascii"))
+            rfm9x.send(bytes("0", "ascii"))
             display.fill(0)
             display.text(msg, 25, 15, 1)
         elif not dock_button.value:
             msg = "Docking Roomba."
             logger.info(msg)
-            rfm9x.send(bytes("2","ascii"))
+            rfm9x.send(bytes("2", "ascii"))
             display.fill(0)
             display.text(msg, 25, 15, 1)
 

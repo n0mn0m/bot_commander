@@ -1,26 +1,32 @@
-import os
-import time
 import logging
+
 # Import Blinka Libraries
 import busio
-from digitalio import DigitalInOut, Direction, Pull
+from digitalio import DigitalInOut
 import board
+
 # Import the SSD1306 module.
 import adafruit_ssd1306
+
 # Import RFM9x
 import adafruit_rfm9x
+
 # App dependencies
 from flask import Flask, request
-from twilio.rest import Client
 from twilio.twiml.messaging_response import MessagingResponse
 
-LOG_FORMAT = '%(asctime)s:%(levelname)s:%(message)s'
-logging.basicConfig(filename="/home/pi/logs/sms.log", level=logging.INFO, format=LOG_FORMAT, datefmt='%m/%d/%Y %I:%M:%S %p')
+LOG_FORMAT = "%(asctime)s:%(levelname)s:%(message)s"
+logging.basicConfig(
+    filename="/home/pi/logs/sms.log",
+    level=logging.INFO,
+    format=LOG_FORMAT,
+    datefmt="%m/%d/%Y %I:%M:%S %p",
+)
 logger = logging.getLogger(__name__)
 
 # Initialize and setup
 i2c = busio.I2C(board.SCL, board.SDA)
-display = adafruit_ssd1306.SSD1306_I2C(128, 32, i2c, addr=0x3c)
+display = adafruit_ssd1306.SSD1306_I2C(128, 32, i2c, addr=0x3C)
 display.fill(0)
 display.show()
 
@@ -33,7 +39,8 @@ rfm9x.tx_power = 23
 
 app = Flask(__name__)
 
-@app.route("/sms", methods=['GET', 'POST'])
+
+@app.route("/sms", methods=["GET", "POST"])
 def sms_start_roomba():
     """
     When a message is received determine which
@@ -46,13 +53,13 @@ def sms_start_roomba():
 
     if txt == "start":
         msg = "Starting the Roomba."
-        cmd = bytes("1","ascii")
+        cmd = bytes("1", "ascii")
     elif txt == "halt":
         msg = "Stopping the Roomba."
-        cmd = bytes("0","ascii")
+        cmd = bytes("0", "ascii")
     elif txt == "dock":
         msg = "Roomba beginning to dock."
-        cmd = bytes("2","ascii")
+        cmd = bytes("2", "ascii")
     else:
         msg = "Unknown command. Continuing."
         cmd = None
@@ -72,6 +79,7 @@ def sms_start_roomba():
 
     return str(resp)
 
+
 if __name__ == "__main__":
     while True:
         try:
@@ -85,4 +93,3 @@ if __name__ == "__main__":
         except BaseException as e:
             logger.exception(e)
             pass
-

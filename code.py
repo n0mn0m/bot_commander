@@ -4,6 +4,7 @@ import digitalio
 import adafruit_rfm9x
 import time
 
+
 class OpenInterface:
     def __init__(self, tx_pin, rx_pin, brc_pin, baud_rate=115200):
         self._board = busio.UART(tx_pin, rx_pin, baudrate=baud_rate)
@@ -13,16 +14,16 @@ class OpenInterface:
         self._brc_pin.direction = digitalio.Direction.OUTPUT
         self._baud_rate = baud_rate
         self._stopped = True
-    
+
     def start(self):
         if self._stopped:
             self.wake_up()
 
-        for command in (b'\x80', b'\x83', b'\x87'):
+        for command in (b"\x80", b"\x83", b"\x87"):
             self._board.write(command)
 
     def stop(self):
-        for command in (b'\x85', b'\xAD'):
+        for command in (b"\x85", b"\xAD"):
             self._board.write(command)
         self._stopped = True
 
@@ -55,10 +56,10 @@ bot.wake_up()
 
 while True:
     # Wait for a packet to be received (up to 0.5 seconds)
-    packet = rfm9x.receive(.5)
+    packet = rfm9x.receive(0.5)
 
     if packet is not None:
-        packet_txt = str(packet, 'ascii')
+        packet_txt = str(packet, "ascii")
 
         if packet_txt == "0":
             bot.stop()
