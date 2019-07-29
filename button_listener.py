@@ -6,7 +6,8 @@ import board
 import adafruit_ssd1306
 import adafruit_rfm9x
 
-logging.basicConfig(filename="/home/pi/logs/button.log", level=logging.INFO)
+LOG_FORMAT = '%(asctime)s:%(levelname)s:%(message)s'
+logging.basicConfig(filename="/home/pi/logs/button.log", level=logging.INFO, format=LOG_FORMAT, datefmt='%m/%d/%Y %I:%M:%S %p')
 logger = logging.getLogger(__name__)
 
 i2c = busio.I2C(board.SCL, board.SDA)
@@ -18,7 +19,6 @@ RESET = DigitalInOut(board.D25)
 spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)
 rfm9x = adafruit_rfm9x.RFM9x(spi, CS, RESET, 433.0)
 rfm9x.tx_power = 23
-prev_packet = None
 
 start_button = DigitalInOut(board.D5)
 start_button.direction = Direction.INPUT
@@ -34,33 +34,36 @@ dock_button.pull = Pull.UP
 
 logger.info("Starting application")
 
+display.fill(0)
+display.text('RasPi LoRa', 35, 0, 1)
+display.show()
+
 while True:
     try:
-        packet = None
-        display.fill(0)
-        display.text('RasPi LoRa', 35, 0, 1)
-
         if not start_button.value:
-            logger.info("Starting bot.")
+            msg = "Starting Roomba."
+            logger.info(msg)
+            rfm9x.send(bytes("1","ascii"))
             display.fill(0)
-            start = bytes("1","utf-8")
-            rfm9x.send(start)
-            display.text('\r\nStarting!', 25, 15, 1)
+            display.text(msg, 25, 15, 1)
         elif not stop_button.value:
-            logger.info("Stopping bot.")
+            msg = "Stopping Roomba."
+            logger.info(msg)
+            rfm9x.send(bytes("0","ascii"))
             display.fill(0)
-            stop = bytes("0","utf-8")
-            rfm9x.send(stop)
-            display.text('\r\nStopping!', 25, 15, 1)
+            display.text(msg, 25, 15, 1)
         elif not dock_button.value:
-            logger.info("Docking bot.")
+            msg = "Docking Roomba."
+            logger.info(msg)
+            rfm9x.send(bytes("2","ascii"))
             display.fill(0)
-            dock = bytes("2","utf-8")
-            rfm9x.send(dock)
-            display.text('\r\nDocking!', 25, 15, 1)
+            display.text(msg, 25, 15, 1)
 
         display.show()
-        time.sleep(0.1)
+        # Be careful how often this refreshes to give time for sms to process.
+        # Switching buttons to interupt instead of poll could help resolve
+        # this conflict.
+        time.sleep(3)
     except BaseException as e:
         logger.exception(e)
         pass
