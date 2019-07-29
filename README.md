@@ -9,7 +9,10 @@ device (in my scenario a Roomba 615).
 
 - `button_listener.py` is meant for use with an Adafruit [RFM LoRa](https://www.adafruit.com/product/3179)
  shield.
- 
+
+- `code.py` is the application that runs on the Adafruit Feather listening for different signals to process
+and send to the Roomba Open Interface.
+
 - `crontab.bak` is a backup of my `crontab` setup that starts the services
 on the RaspberryPi Zero W after reboot.
 
