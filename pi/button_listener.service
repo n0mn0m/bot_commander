@@ -1,0 +1,13 @@
+[Unit]
+Description=shield button listener
+After=ngrok.service
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi
+ExecStart=/home/pi/.virtualenvs/lora-pi/bin/python /home/pi/projects/roomba_supervisor/button_listener.py
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target/

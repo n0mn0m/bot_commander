@@ -3,25 +3,29 @@
 This project contains `python` scripts and `cron` task for operating a Roomba
 615 locally or remotely.
 
+### `/pi`
+
 - `sms_listener.py` runs a web server that monitors a [Twilio](https://www.twilio.com/docs/sms/quickstart/python#allow-twilio-to-talk-to-your-flask-application)
 end point waiting for a message to send a start signal to a connected
 device (in my scenario a Roomba 615).
 
 - `button_listener.py` is meant for use with an Adafruit [RFM LoRa](https://www.adafruit.com/product/3179)
  shield.
-
-- `code.py` is the application that runs on the Adafruit Feather listening for different signals to process
-and send to the Roomba Open Interface.
-
-- `crontab.bak` is a backup of my `crontab` setup that starts the services
-on the RaspberryPi Zero W after reboot.
+ 
+- `*.service` systemd unit files for managing ngrok and the Python application scripts.
 
 - `requirements.txt` are the packages that the virtual environment requires
 for the scripts above to run.
 
+### `/roomba`
+
+- `code.py` is the application that runs on the Adafruit Feather listening for different signals to process and send to the Roomba Open Interface.
+
 ### Notes
 
 This is currently built and running with Python 3.7 and Raspbian.
+
+Service files are provided in `/pi` for managing Python on the zero with systemd
 
 
 ### Hardware

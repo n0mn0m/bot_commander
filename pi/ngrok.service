@@ -1,0 +1,13 @@
+[Unit]
+Description=ngrok
+After=network.service
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi
+ExecStart=/home/pi/ngrok start --all --config="/home/pi/.ngrok2/ngrok.yml"
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
