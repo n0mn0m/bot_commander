@@ -21,7 +21,7 @@ services:
 	@scp pi/*.service ${USER}@c3:/etc/systemd/system
 
 transfer:
-	@cp -X ./roomba/code.py /Volumes/CIRCUITPY
+	cp -X ./roomba/code.py /Volumes/CIRCUITPY
 
 transferd:
 	@cp -rX lib ./roomba/Volumes/CIRCUITPY
